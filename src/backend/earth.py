@@ -13,21 +13,19 @@ asset_id = 'UMD/hansen/global_forest_change_2022_v1_10'
 
 lc = ee.Image(asset_id)
 print(lc.getInfo())
+print('\n')
 
-# Get the loss info for Canada
+countries = ee.FeatureCollection('USDOS/LSIB_SIMPLE/2017')
+canada = countries.filter(ee.Filter.eq('country_na', 'Canada'))
 
-loss = lc.select('loss')
-loss_canada = loss.reduceRegion(reducer=ee.Reducer.sum(), geometry=ee.Geometry.Rectangle(-140, 50, -52, 60), scale=30, maxPixels=1e9, bestEffort=True)
-print(loss_canada.getInfo())
+lossImage = lc.select('loss')
 
-# Get the gain info for Canada
+stats = lossImage.reduceRegion(
+    reducer=ee.Reducer.sum(),
+    geometry=canada.geometry(),
+    scale=30,
+    maxPixels=1e9,
+    bestEffort=True
+    )
 
-gain = lc.select('gain')
-gain_canada = gain.reduceRegion(reducer=ee.Reducer.sum(), geometry=ee.Geometry.Rectangle(-140, 50, -52, 60), scale=30, maxPixels=1e9, bestEffort=True)
-print(gain_canada.getInfo())
-
-# Get the tree cover info for Canada
-
-tree_cover = lc.select('treecover2000')
-tree_cover_canada = tree_cover.reduceRegion(reducer=ee.Reducer.mean(), geometry=ee.Geometry.Rectangle(-140, 50, -52, 60), scale=30, maxPixels=1e9, bestEffort=True)
-print(tree_cover_canada.getInfo())
+print(stats.getInfo())
