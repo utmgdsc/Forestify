@@ -1,1 +1,3 @@
 gcloud
+google-auth
+requests
