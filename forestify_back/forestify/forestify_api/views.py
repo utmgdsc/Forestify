@@ -8,6 +8,17 @@ from rest_framework.response import Response
 
 from . import serializers
 
+#TODO: add a view for user registration
+class RegisterView(views.APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        serializer = serializers.RegisterSerializer(data=self.request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        login(request, user)
+        return Response(None, status=status.HTTP_201_CREATED)
+
 class LoginView(views.APIView):
     # This view should be accessible also for unauthenticated users.
     permission_classes = (permissions.AllowAny,)
