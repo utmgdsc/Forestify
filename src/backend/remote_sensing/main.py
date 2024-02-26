@@ -2,9 +2,9 @@ import ee
 import folium
 from earth_engine_utils import authenticate_and_initialize, get_ndvi_image
 
-# Project ID and point of interest
+# Project ID and area of interest
 project_id = 'forestify-project'
-poi = ee.Geometry.Point([-122.292, 37.9018])
+aoi = ee.Geometry.Point([-122.292, 37.9018])
 
 # NDVI visualization parameters
 ndvi_vis_params = {
@@ -18,7 +18,7 @@ def main():
     authenticate_and_initialize(project_id)
 
     # Compute the NDVI
-    ndvi = get_ndvi_image(poi, '2015-01-01', '2015-12-31')
+    ndvi = get_ndvi_image(aoi, '2015-01-01', '2015-12-31')
 
     # Create a folium map object centered on the point of interest
     my_map = folium.Map(location=[37.9018, -122.292], zoom_start=10)
