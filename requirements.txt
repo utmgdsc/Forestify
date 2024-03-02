@@ -1,0 +1,4 @@
+gcloud
+google-auth
+requests
+earthengine-api
