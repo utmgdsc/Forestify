@@ -1,14 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './LoginSignup.css'
 
 import user_icon from '../Assets/person.png'
 import email_icon from '../Assets/email.png'
 import password_icon from '../Assets/password.png'
 import appLogo from '../Assets/logo.png'
+import axios from 'axios'
 
 export const LoginSignup = () => {
 
   const [action, setAction] = React.useState('Sign Up')
+  
+  //Calling the register endpoint
+  useEffect(() => {
+    axios.get('http://127.0.0.1:8000/register/').then((response) => {
+      console.log(response.data).catch((error) => {
+        console.log(error)
+      })
+    })
+  })
 
   return (
     
