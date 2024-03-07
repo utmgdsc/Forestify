@@ -8,9 +8,9 @@ aoi = ee.Geometry.Point([-122.292, 37.9018])
 
 # NDVI visualization parameters
 ndvi_vis_params = {
-    'min': -1.0,
+    'min': 0.0,
     'max': 1.0,
-    'palette': ['blue', 'white', 'green']
+    'palette': ['red', 'yellow', 'green']
 }
 
 def main():
