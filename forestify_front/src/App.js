@@ -1,6 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
+import { Routes, Route } from "react-router-dom"
 import { LoginSignup } from './components/LoginSignup/LoginSignup';
+import {MapPage} from './components/MapPage/MapPage';
+import {PageNavbar} from './components/PageNavbar/PageNavbar';
 import axios from 'axios';
 
 const client = axios.create({
@@ -13,10 +16,16 @@ axios.defaults.withCredentials = true;
 
 function App() {
   return (
-    <div >
-      <LoginSignup />
+    <div className="App">
+      <PageNavbar/>
+      <Routes>
+        <Route path="/" element={ <MapPage/> } />
+        <Route path="Login" element={ <LoginSignup/> } />
+        <Route path="Profile" element={ <LoginSignup/> } />
+      </Routes>
     </div>
-  );
+  )
 }
-
 export default App;
+
+

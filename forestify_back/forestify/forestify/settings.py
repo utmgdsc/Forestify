@@ -120,6 +120,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+AUTH_USER_MODEL = "forestify_api.AppUser" 
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 

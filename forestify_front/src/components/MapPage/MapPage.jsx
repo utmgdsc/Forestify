@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import './LoginSignup.css'
+import './MapPage.css'
 import user_icon from '../Assets/person.png'
 import email_icon from '../Assets/email.png'
 import password_icon from '../Assets/password.png'
@@ -9,12 +9,18 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
+import { Link } from "react-router-dom";
+
+
+
+import Nav from 'react-bootstrap/Nav';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 
 const client = axios.create({
   baseURL: 'http://localhost:8000/',
 });
 
-export const LoginSignup = () => {
+export const MapPage = () => {
   const gray = {backgroundColor: '#eaeaea'}
   const green = {backgroundColor: '#339900'}
 
@@ -26,91 +32,9 @@ export const LoginSignup = () => {
   const [register, setRegister] = useState(false)
   const [colour, setColour] = useState(gray)
 
-  useEffect(() => {
-    client.get("profile/").then(function(res){
-      setCurrentUser(true)
-    }).catch(function(error){
-      setCurrentUser(false)
-    })
-  }, [])
-
-  // Registers the user and logs them in
-  function submitRegister(e) {
-    e.preventDefault()
-    client.post(
-      "register/",
-      {
-        email: email,
-        password: password,
-        username: username
-      }
-      ).then(function(res) {
-        client.post(
-          "login/",
-          {
-            email: email,
-            password: password
-          }
-        ).then(function(res) {
-          setCurrentUser(true)
-        })
-      })
-  }
-
-  // Sends login request to the server
-  function submitLogin(e) {
-    e.preventDefault()
-    client.post(
-      "login/",
-      {
-        email: email,
-        password: password
-      }
-    ).then(function(res) {
-      setCurrentUser(true)
-    })
-  }
-
-  // Logs the user out
-  function submitLogout(e){
-    e.preventDefault()
-    client.post(
-      "logout/",
-      {withCredentials: true}
-    ).then(function(res) {
-      setCurrentUser(false)
-    })
-  }
-
-  // If the user is logged in, set the current user to the user's username
-  if (currentUser) {
-    return (
-      <div>
-        <Navbar bg="dark" variant="dark">
-          <Container>
-            <Navbar.Brand>Authentication App</Navbar.Brand>
-            <Navbar.Toggle />
-            <Navbar.Collapse className="justify-content-end">
-              <Navbar.Text>
-                <form onSubmit={e => submitLogout(e)}>
-                  <Button type="submit" variant="light">Log out</Button>
-                </form>
-              </Navbar.Text>
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
-          <div className="center">
-            <h2>You're logged in!</h2>
-          </div>
-        </div>
-    );
-  }
-
   return (
-      
+
     <div className='page'>
-
-
       <div className='logo'>
         <img src={appLogo} alt='logo' />
           <div>Forestify.ai</div>
@@ -143,13 +67,6 @@ export const LoginSignup = () => {
         <div className='submit-container'>
           <div className={action==="Login"?"submit gray":"submit"} onClick={(e)=>{setAction("Sign Up"); setRegister(true)}}>Sign Up</div>
           <div className={action==="Sign Up"?"submit gray":"submit"} onClick={(e)=>{setAction("Login"); setRegister(false)}}>Log In</div>
-          <div
-          onMouseEnter={()=>{setColour(green);}}
-          onMouseLeave={()=>{setColour(gray)}} 
-          style={colour} 
-          className={register === false ? "submit":"submit"} 
-          onClick={(e)=>{register === false ? submitLogin(e) : submitRegister(e)}}>Submit
-          </div>
         </div>
         </Form>
       </div>
