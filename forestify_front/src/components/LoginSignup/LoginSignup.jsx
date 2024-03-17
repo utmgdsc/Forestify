@@ -113,7 +113,7 @@ export const LoginSignup = () => {
 
       <div className='logo'>
         <img src={appLogo} alt='logo' />
-          <div>Forestify.ai</div>
+          <div className='logoText'>Forestify.ai</div>
       </div> 
 
       <div className='container'>

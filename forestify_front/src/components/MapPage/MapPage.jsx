@@ -10,67 +10,43 @@ import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 import { Link } from "react-router-dom";
-
-
-
+import * as reactIcons from "react-icons/gr";
+import * as aiIcons from "react-icons/ai";
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import { SidebarData } from './SidebarData';
 
-const client = axios.create({
-  baseURL: 'http://localhost:8000/',
-});
+
 
 export const MapPage = () => {
-  const gray = {backgroundColor: '#eaeaea'}
-  const green = {backgroundColor: '#339900'}
+  const [sidebar, setSidebar] = useState(false);
 
-  const [action, setAction] = useState('Sign Up')
-  const [currentUser, setCurrentUser] = useState(null)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [username, setUserName] = useState('')
-  const [register, setRegister] = useState(false)
-  const [colour, setColour] = useState(gray)
+  const showSidebar = () => setSidebar(!sidebar);
 
   return (
 
-    <div className='page'>
-      <div className='logo'>
-        <img src={appLogo} alt='logo' />
-          <div>Forestify.ai</div>
-      </div> 
+    <>
+      <div className="navbar"> 
+      <Link to="#" className='menu-bars'>
+        <reactIcons.GrMapLocation onClick={showSidebar}/>
+      </Link>
+      <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
+        <ul className='nav-menu-items' onClick={showSidebar}>
 
-      <div className='container'>
-        <div className='header'>
-          <div className='text'>{action}</div>
-          <div className='underline'></div>
-        </div>
-        
-        <Form>
-        <div className='inputs'>
-        {action==="Login"?<div></div>:<div className='input'>
-            <img src={user_icon} alt='name' />
-            <input type='text' placeholder='Username' value={username} onChange={(e) => setUserName(e.target.value)} />
-          </div>}
-          <div className='input'>
-            <img src={email_icon} alt='email' />
-            <input type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)}/>
-          </div>
-          <div className='input'>
-            <img src={password_icon} alt='password' />
-            <input type='password' placeholder='Password'  value={password} onChange={(e) => setPassword(e.target.value)}/>
-          </div>
-        </div> 
-
-        {action==="Sign Up"?<div></div>:<div className="forgot-password">Lost Password? <span>Click Here</span></div>}
-
-        <div className='submit-container'>
-          <div className={action==="Login"?"submit gray":"submit"} onClick={(e)=>{setAction("Sign Up"); setRegister(true)}}>Sign Up</div>
-          <div className={action==="Sign Up"?"submit gray":"submit"} onClick={(e)=>{setAction("Login"); setRegister(false)}}>Log In</div>
-        </div>
-        </Form>
+          {SidebarData.map((item, index) => {
+            return (
+              <li key={index} className={item.cName}>
+                <Link to={item.path}>
+                  {item.icon}
+                  <span>{item.title}</span>
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
+      </nav>
       </div>
-    </div>
+    </>
     
   )
 }
