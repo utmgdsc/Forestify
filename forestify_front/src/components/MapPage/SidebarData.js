@@ -1,7 +1,7 @@
 import React from 'react'
 import * as reactIcons from "react-icons/gr";
 import * as reactIconsLu from "react-icons/lu";
-
+import * as reactIconsFa from "react-icons/fa6";
 
 
 export const SidebarData = [
@@ -12,15 +12,15 @@ export const SidebarData = [
         cName: 'nav-text'
     },
     {
-        title: 'Login',
-        path: '/Login',
-        icon: <reactIcons.GrLogin/>,
+        title: 'Coordinates',
+        path: '/',
+        icon: <reactIconsFa.FaLocationCrosshairs/>,
         cName: 'nav-text'
     },
     {
-        title: 'Profile',
-        path: '/Profile',
-        icon: <reactIcons.GrUserSettings/>,
+        title: 'Intensity',
+        path: '/',
+        icon: <reactIconsFa.FaSliders/>,
         cName: 'nav-text'
     }
     ];

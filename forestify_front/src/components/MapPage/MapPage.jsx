@@ -15,6 +15,7 @@ import * as aiIcons from "react-icons/ai";
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { SidebarData } from './SidebarData';
+import test from '../Assets/test.png'
 
 
 
@@ -46,7 +47,9 @@ export const MapPage = () => {
         </ul>
       </nav>
       </div>
+      <img src={test} height={1500} width={2300}></img>
     </>
+    
     
   )
 }
