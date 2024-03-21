@@ -1,9 +1,6 @@
 import ee
 import folium
 
-ee.Authenticate()
-ee.Initialize(project='forestify-project')
-
 def authenticate_and_initialize(project_id):
     """
     Authenticate and initialize Google Earth Engine.
@@ -11,34 +8,58 @@ def authenticate_and_initialize(project_id):
     ee.Authenticate()
     ee.Initialize(project=project_id)
 
-def get_forest_mask(poi, year=2020):
+def define_aoi(x=-122.292, y=37.9018):
     """
-    Create a mask for forest areas using the MODIS Land Cover Type product.
+    Define an area of interest (AOI) as a point.
     """
-    modis_land_cover = ee.ImageCollection('MODIS/006/MCD12Q1').filterDate(f'{year}-01-01', f'{year}-12-31').first()
-    forest_mask = modis_land_cover.select('LC_Type1').eq(1) # LC_Type1 value of 1 corresponds to 'Evergreen Needleleaf Forest'
-    return forest_mask
+    aoi = ee.Geometry.Point([x, y])
+    return aoi
 
-def get_ndvi_image(poi, start_date, end_date, cloud_cover_sort='CLOUD_COVER', year=2020):
+def get_image(aoi, start_date='2015-01-01', end_date='2015-12-31'):
     """
-    Get the least cloudy image within a date range, compute the NDVI, and mask it to forest areas.
+    Get an image collection from Google Earth Engine.
     """
+    
     l8 = ee.ImageCollection('LANDSAT/LC08/C02/T1_TOA')
-    forest_mask = get_forest_mask(poi, year)
+
     image = ee.Image(
-        l8.filterBounds(poi)
-        .filterDate(start_date, end_date)
-        .sort(cloud_cover_sort)
-        .first()
-    ).updateMask(forest_mask)
+        l8.filterBounds(aoi)
+          .filterDate(start_date, end_date)
+          .sort('CLOUD_COVER')
+          .first()
+    )
+
+    return image
+
+def get_forest_image(image, year='2015'):
+    """
+    Filter the given image for forest areas using land cover classification for a specific year.
+    """
+    # Load the land cover classification image collection for the specified year
+    landcover = ee.ImageCollection("MODIS/006/MCD12Q1").filter(ee.Filter.calendarRange(int(year), int(year), 'year')).first().select('LC_Type1')
+
+    # Define a mask for forested areas (Using MODIS land cover type codes for forests)
+    # MODIS land cover types for forests are typically 1 to 5, but you should adjust these based on your specific needs and the MODIS documentation
+    forest_mask = landcover.eq(1).Or(landcover.eq(2)).Or(landcover.eq(3)).Or(landcover.eq(4)).Or(landcover.eq(5))
+
+    # Apply the mask to the image
+    forest_image = image.updateMask(forest_mask)
+
+    return forest_image
+
+def compute_ndvi(image):
+    """
+    Compute the Normalized Difference Vegetation Index (NDVI).
+    """
     nir = image.select('B5')
     red = image.select('B4')
     ndvi = nir.subtract(red).divide(nir.add(red)).rename('NDVI')
+
     return ndvi
 
 def add_ee_layer(self, ee_image_object, vis_params, name):
     """
-    Add an Earth Engine layer to a Folium map.
+    Add a Google Earth Engine raster layer to a folium map.
     """
     map_id_dict = ee.Image(ee_image_object).getMapId(vis_params)
     folium.raster_layers.TileLayer(
@@ -49,5 +70,4 @@ def add_ee_layer(self, ee_image_object, vis_params, name):
         control=True
     ).add_to(self)
 
-# Extend the Folium Map class to include the add_ee_layer method
 folium.Map.add_ee_layer = add_ee_layer

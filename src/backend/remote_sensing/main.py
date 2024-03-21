@@ -1,36 +1,68 @@
 import ee
 import folium
-from earth_engine_utils import authenticate_and_initialize, get_ndvi_image
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+from earth_engine_utils import authenticate_and_initialize, define_aoi, get_image, compute_ndvi, get_forest_image
 
 # Project ID and area of interest
 project_id = 'forestify-project'
-aoi = ee.Geometry.Point([-122.292, 37.9018])
-
-# NDVI visualization parameters
-ndvi_vis_params = {
-    'min': 0.0,
-    'max': 1.0,
-    'palette': ['red', 'yellow', 'green']
-}
 
 def main():
-    # Authenticate and initialize Earth Engine
+    # Authenticate and initialize Google Earth Engine
     authenticate_and_initialize(project_id)
 
-    # Compute the NDVI
-    ndvi = get_ndvi_image(aoi, '2015-01-01', '2015-12-31')
+    # Define an area of interest (AOI) as a point
+    aoi = define_aoi()
+    
+    # Get an image collection from Google Earth Engine
+    image = get_image(aoi)
 
-    # Create a folium map object centered on the point of interest
-    my_map = folium.Map(location=[37.9018, -122.292], zoom_start=10)
+    # Filter the image for forest areas
+    forest_image = get_forest_image(image)
+
+    # Compute the Normalized Difference Vegetation Index (NDVI)
+    ndvi = compute_ndvi(forest_image)
+    
+    ndvi_info = ndvi.getInfo()
+
+    """
+    uri = "mongodb+srv://limjun2:xN68uyeylPPyO06U@cluster0.yfshzov.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+
+    # Create a new client and connect to the server
+    client = MongoClient(uri, server_api=ServerApi('1'))
+
+    # Send a ping to confirm a successful connection
+    try:
+        client.admin.command('ping')
+        print("Pinged your deployment. You successfully connected to MongoDB!")
+    except Exception as e:
+        print(e)
+    
+    db = client.database
+
+    collection = db.ndvi
+
+    result = collection.insert_one(ndvi_info)
+
+    print('One post: {0}'.format(result.inserted_id))
+    """
+
+
+    
+
+    
+    # Create a folium map
+    m = folium.Map(location=[37.9018, -122.292], zoom_start=10)
+
+    print(m)
 
     # Add the NDVI layer to the map
-    my_map.add_ee_layer(ndvi, ndvi_vis_params, 'NDVI')
+    m.add_ee_layer(ndvi, {'min': -1, 'max': 1, 'palette': ['red', 'yellow', 'green']}, 'NDVI')
 
-    # Add a layer control panel to the map
-    my_map.add_child(folium.LayerControl())
-
-    # Save the map to an HTML file
-    my_map.save('NDVI_Visualization.html')
+    # Display the map
+    m.save('index.html')
+    
+    
 
 if __name__ == '__main__':
     main()
