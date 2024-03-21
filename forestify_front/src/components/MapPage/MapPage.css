@@ -190,3 +190,9 @@ span{
 .nav-menu-items{
     width: 100%;
 }
+
+/* sizing of map container */
+.leaflet-container {
+    width: 100%;
+    height: 100vh;
+}

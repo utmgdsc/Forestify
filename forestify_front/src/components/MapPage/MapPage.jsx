@@ -16,6 +16,8 @@ import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { SidebarData } from './SidebarData';
 import test from '../Assets/test.png'
+import { MapContainer, TileLayer } from "react-leaflet"
+import "leaflet/dist/leaflet.css"
 
 
 
@@ -47,7 +49,12 @@ export const MapPage = () => {
         </ul>
       </nav>
       </div>
-      <img src={test} height={1500} width={2300}></img>
+      <MapContainer center={[37.9018, -122.292]} zoom={10}>
+        <TileLayer
+          attribution='&copy; <a href="https://earthengine.googleapis.com/v1/projects/forestify-project/maps/fde8a1ba03c78a3ecf7df9402ffdd9eb-92433a957d7003edbcc80b2f7e5e7ba6/tiles/{z}/{x}/{y}">Forestify</a>'
+          url="https://earthengine.googleapis.com/v1/projects/forestify-project/maps/fde8a1ba03c78a3ecf7df9402ffdd9eb-92433a957d7003edbcc80b2f7e5e7ba6/tiles/{z}/{x}/{y}"
+        />
+      </MapContainer>
     </>
     
     
