@@ -5,72 +5,112 @@ import azfar from '../Assets/azfarpfp.png';
 import asad from '../Assets/asadpfp.png';
 import jun from '../Assets/junpfp.png';
 import arhum from '../Assets/arhumpfp.png';
+import forest from '../Assets/forest.png';
+import "./AboutPage.css";
 
-// Card component
-const Card = ({ imageUrl, title, text }) => {
-  return (
-    <div className="card" style={{ width: '18rem' }}>
-      <img className="card-img-top" src={imageUrl} alt="Card image cap" />
-      <div className="card-body">
-        <h5 className="card-title">{title}</h5>
-        <p className="card-text">{text}</p>
-      </div>
-    </div>
-  );
-};
+export default function App() {
 
-const AboutPage = () => {
+  window.onscroll = function () {
+    jet();
+  };
+
+  function jet() {
+    var ilake = document.getElementById("head");
+    ilake.style.top = "0px";
+    ilake.style.position = "sticky";
+  }
+
+  window.addEventListener("scroll", () => {
+    var reveals = document.querySelectorAll(".reveal");
+    for (var i = 0; i < reveals.length; i++) {
+      var wnd = window.innerHeight;
+      var rtop = reveals[i].getBoundingClientRect().top;
+      var rpoint = 100;
+
+      if (rtop < wnd - rpoint) {
+        reveals[i].classList.add("active");
+      } else {
+        reveals[i].classList.remove("active");
+      }
+    }
+  });
   return (
-    <div className="page">
-      <div className="header">
-        <div className="logo">
-          <img src={appLogo} alt="Logo" className="logoImg" />
-        </div>
-        <h1 className="text">About Us</h1>
-        <div className="underline"></div>
-      </div>
-      <div className="content">
-        <div className="section-container">
-          <p>Welcome to Forestify, where our mission is to revolutionize environmental monitoring and conservation efforts through satellite imagery and machine learning.
-          Forestify is a dynamic research project aimed at monitoring and analyzing vegetation health, particularly focusing on tree life, using cutting-edge remote sensing techniques. 
-          Our comprehensive approach encompasses data collection, analysis, visualization, and development of user-friendly applications. 
-          Leveraging Google Earth Engine (GEE) and sophisticated data analysis methods, we compute the Normalized Difference Vegetation Index (NDVI) to assess vegetation vitality, 
-          complemented by land cover classification for detailed insights. Our team employs Folium for interactive map visualization, 
-          enabling users to explore vegetation density in specific regions. By integrating diverse datasets and methodologies, we aspire to contribute to environmental monitoring and tree restoration initiatives. 
+    <div classNameName="App">
+
+      <div id="head"></div>
+      <main>
+        <div id="front">
+        <img src={appLogo} alt="Logo" className="logoImg" style={{ width: "300px", height: "auto", transform: "translateY(10%)"}} />
+
+          <h1 style={{ textAlign: "center", fontSize: "4em" }}>Welcome to Forestify!</h1>
+          <img
+            src="https://cdni.iconscout.com/illustration/premium/thumb/about-us-1805547-1537820.png"
+            alt="font"
+          />
+          <p>
+            Welcome to Forestify, where our mission is to revolutionize environmental monitoring and conservation efforts through satellite imagery and machine learning.
+            Forestify is a dynamic research project aimed at monitoring and analyzing vegetation health, particularly focusing on tree life, using cutting-edge remote sensing techniques.
           </p>
         </div>
-        <h1 className="text">Our Team</h1>
-        <div className="underline"></div>
-        <div className="card-container">
-          {/* Four cards */}
-          <Card
-          imageUrl={jun}
-          title="Jun"
-          text="Student"
 
-          />
-          <Card
-          imageUrl={azfar}
-          title="Azfar"
-          text="Student"
+        <div id="first" className="reveal">
+          <img src={forest} alt="Logo" className="logoImg" />
 
-          />
-          <Card
-          imageUrl={asad}
-          title="Asad"
-          text="Student"
+          <div>
+            <h1 style={{ color: "white" }}>An Innovative approach to desertification</h1>
+            <p>
 
-          />
-          <Card
-          imageUrl={arhum}
-          title="Arhum"
-          text="Student"
-          
-          />
+              Our comprehensive approach encompasses data collection, analysis, visualization, and development of user-friendly applications.
+              Leveraging Google Earth Engine (GEE) and sophisticated data analysis methods, we compute the Normalized Difference Vegetation Index (NDVI) to assess vegetation vitality,
+              complemented by land cover classification for detailed insights. Our team employs Folium for interactive map visualization
+              enabling users to explore vegetation density in specific regions. By integrating diverse datasets and methodologies, we aspire to contribute to environmental monitoring and tree restoration initiatives.  </p>
+          </div>
         </div>
+
+        <div id="fourth" className="reveal">
+          <h2 style={{ color: "white", fontSize: "3em" }}>Meet the Team!</h2>
+
+          <div id="fourth_cards">
+
+            <div>
+              <img
+                src={asad}
+                alt=" "
+                style={{ width: "200px", height: "200px" }} // Adjust width and height as needed
+              />
+              <p>Asad</p>
+            </div>
+            <div>
+              <img
+                src={azfar}
+                alt=" "
+                style={{ width: "200px", height: "200px" }} // Adjust width and height as needed
+
+              />
+              <p>Azfar</p>
+            </div>
+            <div>
+              <img
+                src={arhum}
+                alt=" "
+                style={{ width: "200px", height: "200px" }} // Adjust width and height as needed
+
+              />
+              <p>Arhum</p>
+            </div>
+            <div>
+              <img
+                src={jun}
+                alt=" "
+                style={{ width: "200px", height: "200px" }} // Adjust width and height as needed
+
+              />
+              <p>Jun</p>
+            </div>
+
+          </div>
         </div>
-      </div>
+      </main>
+    </div>
   );
-};
-
-export default AboutPage;
+}
