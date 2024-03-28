@@ -70,4 +70,34 @@ def add_ee_layer(self, ee_image_object, vis_params, name):
         control=True
     ).add_to(self)
 
+def calculate_mann_kendall_test(aoi, date_start, date_end):
+    # Load MODIS NDVI
+    l8 = ee.ImageCollection('LANDSAT/LC08/C02/T1_TOA') \
+        .filterBounds(aoi) \
+        .filterDate(date_start, date_end)
+    
+    # Function to calculate NDVI for each image in the collection
+    def add_ndvi(image):
+        ndvi = image.normalizedDifference(['B5', 'B4']).rename('NDVI')
+        return image.addBands(ndvi)
+    
+    # Map the NDVI calculation over the image collection
+    ndvi_collection = l8.map(add_ndvi)
+    
+    # Perform the Mann-Kendall test on the NDVI band
+    ndviTrend = ndvi_collection.select('NDVI').reduce(ee.Reducer.kendallsCorrelation())
+    
+    return ndviTrend
+
+def add_ee_layer_to_map(map_object, ee_image_object, vis_params, layer_name):
+    """Add a Google Earth Engine layer to a folium map."""
+    map_id_dict = ee.Image(ee_image_object).getMapId(vis_params)
+    folium.raster_layers.TileLayer(
+        tiles=map_id_dict['tile_fetcher'].url_format,
+        attr='Map Data &copy; <a href="https://earthengine.google.com/">Google Earth Engine</a>',
+        name=layer_name,
+        overlay=True,
+        control=True
+    ).add_to(map_object)
+
 folium.Map.add_ee_layer = add_ee_layer
