@@ -135,14 +135,16 @@ def calculate_mann_kendall_test_for_forest(aoi, date_start, date_end, ndvi_thres
     return ndvi_trend
 
 def add_ee_layer_to_map(map_object, ee_image_object, vis_params, layer_name):
-    """Add a Google Earth Engine layer to a folium map."""
+    """Add a Google Earth Engine layer to a Folium map and return the URL."""
     map_id_dict = ee.Image(ee_image_object).getMapId(vis_params)
+    tile_url = map_id_dict['tile_fetcher'].url_format
     folium.raster_layers.TileLayer(
-        tiles=map_id_dict['tile_fetcher'].url_format,
+        tiles=tile_url,
         attr='Map Data &copy; <a href="https://earthengine.google.com/">Google Earth Engine</a>',
         name=layer_name,
         overlay=True,
         control=True
     ).add_to(map_object)
+    return tile_url  # Return the URL
 
 folium.Map.add_ee_layer = add_ee_layer

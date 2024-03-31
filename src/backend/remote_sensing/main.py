@@ -22,20 +22,25 @@ def main(analysis_type, aoi, start_date, end_date):
     # Create a folium map centered on the AOI
     m = folium.Map(location=[y, x], zoom_start=10)
 
+    tile_url = ''
+
     if analysis_type.upper() == 'NDVI':
         ndvi = compute_ndvi(image)
-        add_ee_layer_to_map(m, ndvi, {'min': -1, 'max': 1, 'palette': ['red', 'yellow', 'green']}, 'NDVI')
+        tile_url = add_ee_layer_to_map(m, ndvi, {'min': -1, 'max': 1, 'palette': ['red', 'yellow', 'green']}, 'NDVI')
     elif analysis_type.upper() == 'MANN-KENDALL':
         ndvi_trend = calculate_mann_kendall_test_for_forest(aoi, start_date, end_date)
-        add_ee_layer_to_map(m, ndvi_trend.select('NDVI_tau'), {'min': -1, 'max': 1, 'palette': ['red', 'white', 'green']}, 'Mann-Kendall Test')
+        tile_url = add_ee_layer_to_map(m, ndvi_trend.select('NDVI_tau'), {'min': -1, 'max': 1, 'palette': ['red', 'white', 'green']}, 'Mann-Kendall Test')
     else:
         print("Invalid analysis type. Please choose either 'NDVI' or 'Mann-Kendall'.")
 
+    '''
     # Display the map
     map_file = 'index.html'
     m.save(map_file)
     print(f"Map has been saved to {map_file}")
+    '''
 
+    print(tile_url)
 
 if __name__ == '__main__':
     main(analysis_type, aoi, start_date, end_date)
