@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import './MapPage.css'
+import React, { useState } from 'react';
+import './MapPage.css';
 import { Link } from "react-router-dom";
 import { GrMapLocation } from 'react-icons/gr';
 import { SidebarData } from './SidebarData';
-import { MapContainer, TileLayer } from "react-leaflet"
-import "leaflet/dist/leaflet.css"
+import { MapContainer, TileLayer } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 import { OpenStreetMapProvider } from "react-leaflet-geosearch";
 import MapSearch from './MapSearch';
 
 export const MapPage = () => {
   const [sidebar, setSidebar] = useState(false);
-  const [coordinates, setCoordinates] = useState({ latitude: '', longitude: '' }); // State to hold coordinates
+  const [coordinates, setCoordinates] = useState({ location: '', analysis: '' }); // State to hold coordinates and analysis option
 
   const showSidebar = () => setSidebar(!sidebar);
   const prov = OpenStreetMapProvider();
@@ -23,12 +23,27 @@ export const MapPage = () => {
     }));
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitted coordinates:", coordinates);
-
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${coordinates.location}`);
+      const data = await response.json();
+      if (data && data.length > 0) {
+        const { lat, lon } = data[0];
+        const jsonData = {
+          latitude: lat,
+          longitude: lon,
+          analysis: coordinates.analysis
+        };
+        console.log("JSON:", jsonData);
+      } else {
+        console.log("Location not found");
+      }
+    } catch (error) {
+      console.error("Error fetching location:", error);
+    }
   }
-
+  
   return (
     <>
       <div className="navbar"> 
@@ -70,16 +85,20 @@ export const MapPage = () => {
             keepResult={true}
           />
 
-          {/* Coordinates box */}
+          {/* Coordinates and Analysis box */}
           <div className="coordinates-box-overlay">
             <form onSubmit={handleSubmit} className="coordinates-form">
               <div className="form-group">
-                <label htmlFor="latitude">Latitude</label>
-                <input type="text" name="latitude" className="form-control" id="latitude" placeholder="Latitude" value={coordinates.latitude} onChange={handleInputChange} />
+                <label htmlFor="location">Location</label>
+                <input type="text" name="location" className="form-control" id="location" placeholder="Location" value={coordinates.location} onChange={handleInputChange} />
               </div>
               <div className="form-group">
-                <label htmlFor="longitude">Longitude</label>
-                <input type="text" name="longitude" className="form-control" id="longitude" placeholder="Longitude" value={coordinates.longitude} onChange={handleInputChange} />
+                <label htmlFor="analysis">Analysis</label>
+                <select name="analysis" className="form-control" id="analysis" value={coordinates.analysis} onChange={handleInputChange}>
+                  <option value="">Select Analysis</option>
+                  <option value="NDVI">NDVI</option>
+                  <option value="Mann-Kendall">Mann-Kendall</option>
+                </select>
               </div>
               <button type="submit" className="btn btn-primary">Submit</button>
             </form>
