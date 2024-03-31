@@ -47,6 +47,27 @@ def get_forest_image(image, year='2015'):
 
     return forest_image
 
+def get_forest_ndvi_image(image):
+    """
+    Identify forested areas in a given LANDSAT image based on NDVI values.
+    Forested areas are typically associated with high NDVI values.
+    """
+    # Calculate NDVI = (NIR - Red) / (NIR + Red)
+    # LANDSAT 8 band names: B5 (NIR), B4 (Red)
+    ndvi = image.normalizedDifference(['B5', 'B4']).rename('NDVI')
+    
+    # Define a threshold for NDVI to consider as forest
+    # This is an example threshold, and it may need adjustment based on the region and specific forest characteristics
+    ndvi_threshold = 0.3
+    
+    # Create a mask where NDVI values are greater than the threshold
+    forest_mask = ndvi.gte(ndvi_threshold)
+    
+    # Apply the mask to the image to only keep forested areas
+    forest_image = image.updateMask(forest_mask)
+    
+    return forest_image
+
 def compute_ndvi(image):
     """
     Compute the Normalized Difference Vegetation Index (NDVI).
@@ -88,6 +109,30 @@ def calculate_mann_kendall_test(aoi, date_start, date_end):
     ndviTrend = ndvi_collection.select('NDVI').reduce(ee.Reducer.kendallsCorrelation())
     
     return ndviTrend
+
+def calculate_mann_kendall_test_for_forest(aoi, date_start, date_end, ndvi_threshold=0.3):
+    """
+    Calculate the Mann-Kendall test for NDVI trends, focusing on forested areas.
+    """
+    # Load LANDSAT NDVI
+    l8 = ee.ImageCollection('LANDSAT/LC08/C02/T1_TOA') \
+        .filterBounds(aoi) \
+        .filterDate(date_start, date_end)
+    
+    # Function to calculate NDVI and identify forested areas
+    def add_ndvi_and_forest_mask(image):
+        ndvi = image.normalizedDifference(['B5', 'B4']).rename('NDVI')
+        forest_mask = ndvi.gte(ndvi_threshold)  # Mask for forested areas
+        forest_ndvi = ndvi.updateMask(forest_mask)  # Apply mask to keep only forested areas
+        return image.addBands(forest_ndvi)
+    
+    # Map the NDVI calculation and forest masking over the image collection
+    forest_ndvi_collection = l8.map(add_ndvi_and_forest_mask)
+    
+    # Perform the Mann-Kendall test on the NDVI band of forested areas
+    ndvi_trend = forest_ndvi_collection.select('NDVI').reduce(ee.Reducer.kendallsCorrelation())
+    
+    return ndvi_trend
 
 def add_ee_layer_to_map(map_object, ee_image_object, vis_params, layer_name):
     """Add a Google Earth Engine layer to a folium map."""
