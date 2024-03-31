@@ -10,7 +10,7 @@ import MapSearch from './MapSearch';
 
 export const MapPage = () => {
   const [sidebar, setSidebar] = useState(false);
-  const [coordinates, setCoordinates] = useState({ latitude: '', longitude: '' }); // State to hold coordinates
+  const [coordinates, setCoordinates] = useState({ location: '', latitude: '', longitude: '' }); // State to hold coordinates
 
   const showSidebar = () => setSidebar(!sidebar);
   const prov = OpenStreetMapProvider();
@@ -23,11 +23,26 @@ export const MapPage = () => {
     }));
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitted coordinates:", coordinates);
-
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${coordinates.location}`);
+      const data = await response.json();
+      if (data && data.length > 0) {
+        const { lat, lon } = data[0];
+        setCoordinates(prevState => ({
+          ...prevState,
+          latitude: lat,
+          longitude: lon
+        }));
+      } else {
+        console.log("Location not found");
+      }
+    } catch (error) {
+      console.error("Error fetching location:", error);
+    }
   }
+  
 
   return (
     <>
@@ -74,12 +89,8 @@ export const MapPage = () => {
           <div className="coordinates-box-overlay">
             <form onSubmit={handleSubmit} className="coordinates-form">
               <div className="form-group">
-                <label htmlFor="latitude">Latitude</label>
-                <input type="text" name="latitude" className="form-control" id="latitude" placeholder="Latitude" value={coordinates.latitude} onChange={handleInputChange} />
-              </div>
-              <div className="form-group">
-                <label htmlFor="longitude">Longitude</label>
-                <input type="text" name="longitude" className="form-control" id="longitude" placeholder="Longitude" value={coordinates.longitude} onChange={handleInputChange} />
+                <label htmlFor="location">Location</label>
+                <input type="text" name="location" className="form-control" id="location" placeholder="Location" value={coordinates.location} onChange={handleInputChange} />
               </div>
               <button type="submit" className="btn btn-primary">Submit</button>
             </form>
