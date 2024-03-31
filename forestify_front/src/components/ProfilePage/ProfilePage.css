@@ -3,3 +3,32 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+.error-message {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Full viewport height */
+  }
+  
+  .large-text {
+    font-size: 3rem; /* Adjust font size as needed */
+    text-align: center; /* Center text within the div */
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); /* Add a shadow effect */
+}
+
+.slide{
+    animation: slideIn 2s forwards; /* Apply slideIn animation */
+    opacity: 0; /* Initially hide the text */
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px); /* Start from a position 50px above */
+        opacity: 0; /* Start with opacity 0 */
+    }
+    to {
+        transform: translateY(0); /* Slide down to the original position */
+        opacity: 1; /* Fully visible */
+    }
+}

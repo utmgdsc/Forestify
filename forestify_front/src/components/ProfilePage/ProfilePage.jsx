@@ -1,4 +1,6 @@
 import React from 'react';
+import './ProfilePage.css';
+import { LoginSignup } from '../LoginSignup/LoginSignup';
 
 const Profile = ({ user }) => {
   return (
@@ -12,10 +14,12 @@ const Profile = ({ user }) => {
           )}
         </div>
       ) : (
-        <div>user: not logged in</div>
+          <LoginSignup />
+
       )}
     </div>
   );
 };
 
+//note https://www.youtube.com/watch?v=XwTp2ePRBYk
 export default Profile;

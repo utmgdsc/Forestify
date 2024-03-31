@@ -120,8 +120,9 @@
     justify-content: space-between;
   }
   
-  #first div {
-    text-align: left;
+  .text{
+    text-align: center;
+    font-size: larger;
   }
   
   /* inovative font */

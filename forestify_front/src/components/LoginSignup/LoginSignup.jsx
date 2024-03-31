@@ -10,7 +10,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
-
+import AboutPage from '../AboutPage/AboutPage'; // Corrected import
 const client = axios.create({
   baseURL: 'http://localhost:8000/',
 });
@@ -22,7 +22,7 @@ export const LoginSignup = () => {
   const [action, setAction] = useState('Sign Up');
   const [currentUser, setCurrentUser] = useState(null);
   const [colour, setColour] = useState({ backgroundColor: '#eaeaea' });
-  const history = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate(); // Change history to navigate
 
   useEffect(() => {
     client.get("profile/").then(function (res) {
@@ -44,7 +44,7 @@ export const LoginSignup = () => {
       }
     ).then(function (res) {
       setCurrentUser(true);
-      history.push("/profile"); // Redirect to profile page after successful registration
+      navigate("/profile"); // Change history.push to navigate
     });
   }
 
@@ -59,7 +59,7 @@ export const LoginSignup = () => {
       }
     ).then(function (res) {
       setCurrentUser(true);
-      history.push("/profile"); // Redirect to profile page after successful login
+      navigate("/profile"); // Change history.push to navigate
     });
   }
 
@@ -77,21 +77,8 @@ export const LoginSignup = () => {
   if (currentUser) {
     return (
       <div>
-        <Navbar bg="dark" variant="dark">
-          <Container>
-            <Navbar.Brand>Authentication App</Navbar.Brand>
-            <Navbar.Toggle />
-            <Navbar.Collapse className="justify-content-end">
-              <Navbar.Text>
-                <form onSubmit={e => submitLogout(e)}>
-                  <Button type="submit" variant="light">Log out</Button>
-                </form>
-              </Navbar.Text>
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
         <div className="center">
-          <h2>You're logged in!</h2>
+          <AboutPage />
         </div>
       </div>
     );

@@ -8,7 +8,7 @@ import arhum from '../Assets/arhumpfp.png';
 import forest from '../Assets/forest.png';
 import "./AboutPage.css";
 
-export default function App() {
+export default function AboutPage() {
 
   window.onscroll = function () {
     jet();
@@ -47,7 +47,7 @@ export default function App() {
             src="https://cdni.iconscout.com/illustration/premium/thumb/about-us-1805547-1537820.png"
             alt="font"
           />
-          <p>
+          <p className='text'>
             Welcome to Forestify, where our mission is to revolutionize environmental monitoring and conservation efforts through satellite imagery and machine learning.
             Forestify is a dynamic research project aimed at monitoring and analyzing vegetation health, particularly focusing on tree life, using cutting-edge remote sensing techniques.
           </p>
@@ -56,14 +56,15 @@ export default function App() {
         <div id="first" className="reveal">
           <img src={forest} alt="Logo" className="logoImg" />
 
-          <div>
-            <h1 style={{ color: "white" }}>An Innovative approach to desertification</h1>
-            <p>
+          <div text>
+            <h1 className='text' style={{ color: "white"}}>An Innovative approach to desertification</h1>
+            <p className='text'>
 
               Our comprehensive approach encompasses data collection, analysis, visualization, and development of user-friendly applications.
               Leveraging Google Earth Engine (GEE) and sophisticated data analysis methods, we compute the Normalized Difference Vegetation Index (NDVI) to assess vegetation vitality,
               complemented by land cover classification for detailed insights. Our team employs Folium for interactive map visualization
-              enabling users to explore vegetation density in specific regions. By integrating diverse datasets and methodologies, we aspire to contribute to environmental monitoring and tree restoration initiatives.  </p>
+              enabling users to explore vegetation density in specific regions. By integrating diverse datasets and methodologies, we aspire to contribute to environmental monitoring and tree restoration initiatives.  
+              </p>
           </div>
         </div>
 
