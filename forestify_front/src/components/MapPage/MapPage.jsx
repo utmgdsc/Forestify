@@ -7,12 +7,13 @@ import { MapContainer, TileLayer } from "react-leaflet"
 import "leaflet/dist/leaflet.css"
 import { OpenStreetMapProvider } from "react-leaflet-geosearch";
 import MapSearch from './MapSearch';
+import { useEffect } from 'react';
 
 export const MapPage = () => {
-  const [sidebar, setSidebar] = useState(false);
+  // const [sidebar, setSidebar] = useState(false);
   const [coordinates, setCoordinates] = useState({ latitude: '', longitude: '' }); // State to hold coordinates
 
-  const showSidebar = () => setSidebar(!sidebar);
+  // const showSidebar = () => setSidebar(!sidebar);
   const prov = OpenStreetMapProvider();
 
   const handleInputChange = (e) => {
@@ -29,9 +30,10 @@ export const MapPage = () => {
 
   }
 
+
   return (
     <>
-      <div className="navbar"> 
+      {/* <div className="navbar"> 
         <Link to="#" className='menu-bars'>
           <GrMapLocation onClick={showSidebar}/>
         </Link>
@@ -49,13 +51,16 @@ export const MapPage = () => {
             })}
           </ul>
         </nav>
-      </div>
+      </div> */}
 
       <div className="map-container-wrapper">
-        <MapContainer center={[51.505, -0.091]} zoom={13}>
+        <MapContainer center={[30.033333, 31.233334]} zoom={13}>
           <TileLayer
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
+          />
+          <TileLayer
+          url="https://earthengine.googleapis.com/v1/projects/forestify-project/maps/4b724472b02ca7bc0eac108ad62aab6c-4a4abeb009b2b548b06b44fe70786f54/tiles/{z}/{x}/{y}"
           />
           <MapSearch
             provider={prov}
@@ -70,7 +75,7 @@ export const MapPage = () => {
             keepResult={true}
           />
 
-          {/* Coordinates box */}
+          
           <div className="coordinates-box-overlay">
             <form onSubmit={handleSubmit} className="coordinates-form">
               <div className="form-group">
@@ -84,8 +89,10 @@ export const MapPage = () => {
               <button type="submit" className="btn btn-primary">Submit</button>
             </form>
           </div>
+
         </MapContainer>
       </div>
+
     </>
   );
 }
