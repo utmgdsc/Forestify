@@ -35,3 +35,12 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = ('email', 'username')
+
+class MapSerializer(serializers.Serializer):
+    latitude = serializers.FloatField()
+    longitude = serializers.FloatField()
+    analysis = serializers.CharField()
+    startDate = serializers.DateField()
+    endDate = serializers.DateField()
+
+

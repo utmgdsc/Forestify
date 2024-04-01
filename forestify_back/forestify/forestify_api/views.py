@@ -11,6 +11,8 @@ from rest_framework import permissions, status
 from .validations import validate_email, validate_password, custom_validation
 from . import serializers
 
+from earthEngineMap import getMapLink
+
 class RegisterView(views.APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -54,3 +56,24 @@ class ProfileView(generics.RetrieveAPIView):
     def get(self, request):
         serializer = serializers.UserSerializer(request.user)
         return Response({'user': serializer.data}, status=status.HTTP_200_OK)
+
+class MapView(views.APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request):
+        print(request.query_params)
+        print(request.data)
+
+        analysis = request.GET.get('analysis')
+        longitude = request.GET.get('longitude')
+        latitude = request.GET.get('latitude')
+        startDate = request.GET.get('startDate')
+        endDate = request.GET.get('endDate')
+
+        # print(analysis, longitude, latitude, startDate, endDate)
+        # serializer = serializers.MapSerializer(data=request.data)
+        mapLink = getMapLink(request.query_params['analysis'], float(request.query_params['longitude']), float(request.query_params['latitude']), request.query_params['startDate'], request.query_params['endDate'])
+        # mapLink = ""
+        return Response({'MapLink': mapLink}, status=status.HTTP_200_OK)
+
+    
