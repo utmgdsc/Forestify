@@ -32,6 +32,10 @@ class LoginView(views.APIView):
 
     def post(self, request):
         data = request.data
+        print(data)
+        print("REQUEST DATA HERE:", request.GET)
+        print("REQUEST DATA HERE:", request.POST)
+
         assert validate_email(data)
         assert validate_password(data)
         serializer = serializers.LoginSerializer(data=data)
