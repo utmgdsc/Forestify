@@ -2,12 +2,9 @@ Django==4.1.13
 djangorestframework==3.14.0
 pymongo==3.12.3
 djongo
-<<<<<<< HEAD
 gcloud
 google-auth
 requests
 earthengine-api
 folium
-=======
 django-cors-headers
->>>>>>> de9d554d2deacbf3f62ff7e1a8879c65b66b0595
