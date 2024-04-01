@@ -76,9 +76,9 @@ class MapView(views.APIView):
 
         # print(analysis, longitude, latitude, startDate, endDate)
         # serializer = serializers.MapSerializer(data=request.data)
-        # mapLink = getMapLink(request.query_params['analysis'], float(request.query_params['longitude']), float(request.query_params['latitude']), request.query_params['startDate'], request.query_params['endDate'])
+        mapLink = getMapLink(analysis, float(longitude), float(latitude), startDate, endDate)
         
-        mapLink = f"{analysis}{longitude}{latitude}{startDate}{endDate}.com"
+        # mapLink = f"{analysis}{longitude}{latitude}{startDate}{endDate}.com"
         return Response({'MapLink': mapLink}, status=status.HTTP_200_OK)
 
     
