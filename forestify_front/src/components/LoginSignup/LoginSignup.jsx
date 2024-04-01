@@ -5,9 +5,8 @@ import email_icon from '../Assets/email.png';
 import password_icon from '../Assets/password.png';
 import appLogo from '../Assets/logo.png';
 import axios from 'axios';
-import Container from 'react-bootstrap/Container';
-import Navbar from 'react-bootstrap/Navbar';
-import Button from 'react-bootstrap/Button';
+import { toast } from 'react-toastify';
+
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 import AboutPage from '../AboutPage/AboutPage'; // Corrected import
@@ -15,7 +14,7 @@ const client = axios.create({
   baseURL: 'http://localhost:8000/',
 });
 
-export const LoginSignup = () => {
+export const LoginSignup = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -43,12 +42,18 @@ export const LoginSignup = () => {
         username: username
       }
     ).then(function (res) {
+      // Simulate user data response from the server
+      const userData = {
+        username: username, // Replace with actual response data as needed
+        email: email,
+      };
       setCurrentUser(true);
-      navigate("/profile"); // Change history.push to navigate
+      onLogin(userData); // Pass userData to the App component
+      navigate("/profile");
     });
   }
 
-  // Sends login request to the server
+
   function submitLogin(e) {
     e.preventDefault();
     client.post(
@@ -58,8 +63,14 @@ export const LoginSignup = () => {
         password: password
       }
     ).then(function (res) {
+      // Simulate user data response from the server
+      const userData = {
+        username: email, // This is a placeholder, adjust based on actual response
+        email: email,
+      };
       setCurrentUser(true);
-      navigate("/profile"); // Change history.push to navigate
+      onLogin(userData); // Pass userData to the App component
+      navigate("/profile");
     });
   }
 
@@ -98,15 +109,15 @@ export const LoginSignup = () => {
         <Form>
           <div className='inputs'>
             {action === "Login" ? <div></div> : <div className='input'>
-              <img src={user_icon} alt='name' />
+              <img  className="icon-image" src={user_icon} alt='name' />
               <input type='text' placeholder='Username' value={username} onChange={(e) => setUsername(e.target.value)} />
             </div>}
             <div className='input'>
-              <img src={email_icon} alt='email' />
+              <img  className="icon-image" src={email_icon} alt='email' />
               <input type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className='input'>
-              <img src={password_icon} alt='password' />
+              <img  className="icon-image" src={password_icon} alt='password' />
               <input type='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
           </div>

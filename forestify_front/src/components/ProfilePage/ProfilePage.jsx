@@ -1,25 +1,38 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './ProfilePage.css';
-import { LoginSignup } from '../LoginSignup/LoginSignup';
+import logo from '../Assets/logo.png';
+import { toast } from 'react-toastify'; // Import toast
 
 const Profile = ({ user }) => {
+  useEffect(() => {
+    if (!user) {
+      toast.warn("You must log in first!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }, [user]); // Dependency array with user ensures this runs only when user changes
+
   return (
     <div>
-      {user ? ( // Check if user is not null
-        <div>
-          {user.username ? ( // Check if user.username is not null
-            <div className='centered'>user: {user.username}</div>
-          ) : (
-            <div>user: logged in but username not available</div>
-          )}
+      {user ? (
+        <div className='slide'>
+          <img src={logo} alt="logo" />
+          <h1 className='welcome'>Welcome to Forestify! {user.username}</h1>
+          <h2 className='tagline'>Your Profile:</h2>
+          <p className='ptag'>Email: {user.email}</p>
+          <p className='ptag'>Username: {user.username}</p>
         </div>
       ) : (
-          <LoginSignup />
-
+        <React.Fragment/>
       )}
     </div>
   );
 };
 
-//note https://www.youtube.com/watch?v=XwTp2ePRBYk
 export default Profile;
