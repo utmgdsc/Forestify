@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './MapPage.css';
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { OpenStreetMapProvider } from "react-leaflet-geosearch";
-import MapSearch from './MapSearch';
+// import Legend from './Legend';
+import legend from '../Assets/legend.jpg';
 // import { map } from 'leaflet';
+import L from 'react-leaflet';
 
 // Used to recenter the map to new coordinates
 const MapRecenter= ({ lat, lng, zoomLevel }) => {
@@ -24,13 +25,14 @@ export const MapPage = () => {
   const [mapLink, setMapLink] = useState("https://earthengine.googleapis.com/v1/projects/forestify-project/maps/4b724472b02ca7bc0eac108ad62aab6c-4a4abeb009b2b548b06b44fe70786f54/tiles/{z}/{x}/{y}");
   const [lat, setLat] = useState(43.6532);
   const [lon, setLon] = useState(-79.3832);
+  const [map, setMap] = useState(null);
+
   //const showSidebar = () => setSidebar(!sidebar);
-  const prov = OpenStreetMapProvider();
+  // const prov = OpenStreetMapProvider();
 
   // let lat = 43.6532;
   // let lon = -79.3832;
   // let mapLink = "https://earthengine.googleapis.com/v1/projects/forestify-project/maps/4b724472b02ca7bc0eac108ad62aab6c-4a4abeb009b2b548b06b44fe70786f54/tiles/{z}/{x}/{y}"
-
 
 
   const handleInputChange = (e) => {
@@ -77,7 +79,7 @@ export const MapPage = () => {
     <>
 
       <div className="map-container-wrapper">
-        <MapContainer center={[lat,lon]} zoom={10}>
+        <MapContainer center={[lat,lon]} zoom={10} whenCreated={setMap}>
           <MapRecenter lat={lat} lng={lon} zoomLevel={10} />
           <TileLayer
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -85,18 +87,6 @@ export const MapPage = () => {
           />
           <TileLayer
             url={mapLink}
-          />
-          <MapSearch
-            provider={prov}
-            showMarker={true}
-            showPopup={false}
-            popupFormat={({ query, result }) => result.label}
-            maxMarkers={3}
-            retainZoomLevel={false}
-            animateZoom={true}
-            autoClose={false}
-            searchLabel={"Enter Location"}
-            keepResult={true}
           />
 
           {/* Coordinates, Analysis, and Date inputs */}
@@ -124,6 +114,10 @@ export const MapPage = () => {
               </div>
               <button type="submit" className="btn btn-primary">Submit</button>
             </form>
+          </div>
+
+          <div className="legend-box-overlay">
+            <img src={legend} alt="Legend" width="350vw" min-width= "330px"  />
           </div>
         </MapContainer>
       </div>

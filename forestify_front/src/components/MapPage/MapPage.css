@@ -217,4 +217,15 @@ span{
   .coordinates-form .form-group {
     margin-bottom: 10px; 
   }
-  
+
+  .legend-box-overlay {
+    position: absolute;
+    bottom: 65px;
+    right: 10px;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px; 
+    z-index: 1000;
+    /* width: %; */
+  }
