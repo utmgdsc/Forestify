@@ -15,16 +15,32 @@ def define_aoi(x=-122.292, y=37.9018):
     aoi = ee.Geometry.Point([x, y])
     return aoi
 
+def get_growing_season_months(latitude):
+    """
+    Determine growing season months based on latitude.
+    Northern Hemisphere (latitude > 0): June (6), July (7), August (8)
+    Southern Hemisphere (latitude < 0): September (9), October (10), November (11)
+    """
+    if latitude > 0:
+        return [6, 7, 8]
+    else:
+        return [9, 10, 11]
+
+
+
 def get_image(aoi, start_date='2015-01-01', end_date='2015-12-31'):
     """
-    Get an image collection from Google Earth Engine.
+    Get an image collection from Google Earth Engine filtered by growing season months.
     """
+    latitude = aoi.coordinates().get(1).getInfo()  # Extract latitude from AOI
+    growing_season_months = get_growing_season_months(latitude)
     
     l8 = ee.ImageCollection('LANDSAT/LC08/C02/T1_TOA')
 
     image = ee.Image(
         l8.filterBounds(aoi)
           .filterDate(start_date, end_date)
+          .filter(ee.Filter.calendarRange(growing_season_months[0], growing_season_months[-1], 'month'))
           .sort('CLOUD_COVER')
           .first()
     )
@@ -112,13 +128,16 @@ def calculate_mann_kendall_test(aoi, date_start, date_end):
 
 def calculate_mann_kendall_test_for_forest(aoi, date_start, date_end, ndvi_threshold=0.3):
     """
-    Calculate the Mann-Kendall test for NDVI trends, focusing on forested areas.
+    Calculate the Mann-Kendall test for NDVI trends, focusing on forested areas during the growing season.
     """
-    # Load LANDSAT NDVI
+    latitude = aoi.coordinates().get(1).getInfo()  # Extract latitude from AOI
+    growing_season_months = get_growing_season_months(latitude)
+
     l8 = ee.ImageCollection('LANDSAT/LC08/C02/T1_TOA') \
         .filterBounds(aoi) \
-        .filterDate(date_start, date_end)
-    
+        .filterDate(date_start, date_end) \
+        .filter(ee.Filter.calendarRange(growing_season_months[0], growing_season_months[-1], 'month'))
+
     # Function to calculate NDVI and identify forested areas
     def add_ndvi_and_forest_mask(image):
         ndvi = image.normalizedDifference(['B5', 'B4']).rename('NDVI')

@@ -33,12 +33,14 @@ def main(analysis_type, aoi, start_date, end_date):
     else:
         print("Invalid analysis type. Please choose either 'NDVI' or 'Mann-Kendall'.")
 
-    '''
+    """
     # Display the map
     map_file = 'index.html'
     m.save(map_file)
     print(f"Map has been saved to {map_file}")
-    '''
+    """
+    
+    
 
     print(tile_url)
 
