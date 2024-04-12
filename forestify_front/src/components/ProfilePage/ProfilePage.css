@@ -1,0 +1,39 @@
+.ptag {
+    font-size: 2rem; /* Large text size for paragraphs */
+    margin: 10px 0; /* Spacing around paragraphs */
+    text-align: center; /* Center-align the text */
+    color: #ffffff; /* Green text color */
+    text-shadow: 1px 1px 2px rgb(0, 0, 0); 
+  }
+
+.slide{
+    animation: slideIn 2s forwards; /* Apply slideIn animation */
+    opacity: 0; /* Initially hide the text */
+}
+
+.welcome{
+    font-size: 3rem; /* Large text size for headings */
+    margin: 10px 0; /* Spacing around headings */
+    text-align: center; /* Center-align the text */
+    color: #ffffff; /* Green text color */
+    text-shadow: 1px 1px 2px rgb(0, 0, 0); 
+
+}
+
+.tagline{
+    color: #ffffff;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgb(0, 0, 0);
+}
+
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px); /* Start from a position 50px above */
+        opacity: 0; /* Start with opacity 0 */
+    }
+    to {
+        transform: translateY(0); /* Slide down to the original position */
+        opacity: 1; /* Fully visible */
+    }
+}
